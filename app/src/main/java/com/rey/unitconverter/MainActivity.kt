@@ -75,13 +75,19 @@ fun UnitConverter() {
     Spacer(modifier = Modifier.height(20.dp))
 
     Row {
+      //Input Box
       Box {
-        Button(onClick = { /*TODO*/}) {
+        //Input Button
+        Button(onClick = { iExpanded = true }) {
           Text(text = "Select")
           Icon(Icons.Default.ArrowDropDown , contentDescription ="Arrow Down")
         }
-        DropdownMenu(expanded = false, onDismissRequest = { /*TODO*/ }) {
-          DropdownMenuItem(text = { Text("Centimeter")}, onClick = { /*TODO*/ })
+        DropdownMenu(expanded = iExpanded, onDismissRequest = { iExpanded = false }) {
+          DropdownMenuItem(text = { Text("Centimeter")}, onClick = {
+            iExpanded = false
+            inputUnit = "Centimeter"
+            conversionFactor.value = 0.01
+          })
           DropdownMenuItem(text = { Text("Meter")}, onClick = { /*TODO*/ })
           DropdownMenuItem(text = { Text("Feet")}, onClick = { /*TODO*/ })
           DropdownMenuItem(text = { Text("Millimeter")}, onClick = { /*TODO*/ })
@@ -91,12 +97,14 @@ fun UnitConverter() {
 
       Spacer(modifier = Modifier.width(20.dp))
 
+      //Output Box
       Box {
-        Button(onClick = { /*TODO*/}) {
+        //Output Button
+        Button(onClick = { oExpanded = true }) {
           Text(text = "Select")
           Icon(Icons.Default.ArrowDropDown , contentDescription ="Arrow Down")
         }
-        DropdownMenu(expanded = false, onDismissRequest = { /*TODO*/ }) {
+        DropdownMenu(expanded = oExpanded, onDismissRequest = { oExpanded = false }) {
           DropdownMenuItem(text = { Text("Centimeter")}, onClick = { /*TODO*/ })
           DropdownMenuItem(text = { Text("Meter")}, onClick = { /*TODO*/ })
           DropdownMenuItem(text = { Text("Feet")}, onClick = { /*TODO*/ })
