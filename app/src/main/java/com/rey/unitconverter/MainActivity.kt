@@ -55,12 +55,13 @@ fun UnitConverter() {
   var outputUnit by remember { mutableStateOf("Meter") }
   var iExpanded by remember { mutableStateOf(false) }
   var oExpanded by remember { mutableStateOf(false) }
-  var conversionFactor = remember { mutableStateOf(0.01) }
+  var conversionFactor = remember { mutableStateOf(1.0) }
+  var oConversionFactor = remember { mutableStateOf(1.0) }
 
   fun convertUnits(){
     // ?: --> elvis operator
     val inputValueDouble = inputValue.toDoubleOrNull() ?: 0.0
-    val result = (inputValueDouble * conversionFactor.value * 100).roundToInt()/ 100
+    val result = (inputValueDouble * conversionFactor.value * 100 / oConversionFactor.value).roundToInt()/ 100
     outputValue = result.toString()
   }
 
@@ -72,12 +73,12 @@ fun UnitConverter() {
     Text("Unit Converter")
     Spacer(modifier = Modifier.height(20.dp))
     OutlinedTextField(
-        value = inputValue,
-        onValueChange = {
-          inputValue = it
-        // Will Implement Later when value changes
-        },
-        label = { Text(text = "Enter Value")}
+      value = inputValue,
+      onValueChange = {
+        inputValue = it
+        convertUnits()
+      },
+      label = { Text(text = "Enter Value")}
     )
     Spacer(modifier = Modifier.height(20.dp))
 
@@ -86,7 +87,7 @@ fun UnitConverter() {
       Box {
         //Input Button
         Button(onClick = { iExpanded = true }) {
-          Text(text = "Select")
+          Text(text = inputUnit)
           Icon(Icons.Default.ArrowDropDown , contentDescription ="Arrow Down")
         }
         DropdownMenu(expanded = iExpanded, onDismissRequest = { iExpanded = false }) {
@@ -124,14 +125,34 @@ fun UnitConverter() {
       Box {
         //Output Button
         Button(onClick = { oExpanded = true }) {
-          Text(text = "Select")
+          Text(text = outputUnit)
           Icon(Icons.Default.ArrowDropDown , contentDescription ="Arrow Down")
         }
         DropdownMenu(expanded = oExpanded, onDismissRequest = { oExpanded = false }) {
-          DropdownMenuItem(text = { Text("Centimeter")}, onClick = { /*TODO*/ })
-          DropdownMenuItem(text = { Text("Meter")}, onClick = { /*TODO*/ })
-          DropdownMenuItem(text = { Text("Feet")}, onClick = { /*TODO*/ })
-          DropdownMenuItem(text = { Text("Millimeter")}, onClick = { /*TODO*/ })
+          DropdownMenuItem(text = { Text("Centimeter")}, onClick = {
+            oExpanded = false
+            outputUnit = "Centimeter"
+            oConversionFactor.value = 0.01
+            convertUnits()
+          })
+          DropdownMenuItem(text = { Text("Meter")}, onClick = {
+            oExpanded = false
+            outputUnit = "Meter"
+            oConversionFactor.value = 1.0
+            convertUnits()
+          })
+          DropdownMenuItem(text = { Text("Feet")}, onClick = {
+            oExpanded = false
+            outputUnit = "Feet"
+            oConversionFactor.value = 0.3048
+            convertUnits()
+          })
+          DropdownMenuItem(text = { Text("Millimeter")}, onClick = {
+            oExpanded = false
+            outputUnit = "Millimeter"
+            oConversionFactor.value = 0.001
+            convertUnits()
+          })
         }
       }
 
@@ -139,7 +160,7 @@ fun UnitConverter() {
 
     Spacer(modifier = Modifier.height(20.dp))
 
-    Text("Result:")
+    Text("Result: $outputValue")
   }
 }
 
